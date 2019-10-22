@@ -2,10 +2,9 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 
-let win;
-
+//Öffne neues BrowserWindow, wenn die App ready ist.
 app.on('ready', () => {
-    win = new BrowserWindow({
+    let win = new BrowserWindow({
         width:800,
         heigth:600,
         webPreferences: {
@@ -26,6 +25,7 @@ app.on('ready', () => {
     })
 });
 
+//Beende die App, wenn alle Fenster geschlossen sind
 app.on('window-all-closed', () =>{
     if(process.platform !== 'darwin'){
         app.quit();
