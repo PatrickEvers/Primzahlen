@@ -1,3 +1,7 @@
+var app = require('electron').remote; 
+var dialog = app.dialog;
+var fs = require('fs');
+
 const ul = document.getElementById('primzahlen');
 
 var numbers = [];
@@ -20,8 +24,8 @@ document.getElementById('startBtn').addEventListener('click', () => {
 })
 
 function printNumber(number){
-    var ul = document.getElementById("primzahlen");
     var li = document.createElement("li");
+    li.id = "list-item";
     li.appendChild(document.createTextNode(number));
     ul.appendChild(li);
 }
@@ -37,3 +41,25 @@ function test(number){
     }
     return true;
 }
+var list = [];
+document.getElementById('saveBtn').addEventListener('click', () => {
+    const listItems = document.querySelectorAll('#primzahlen li');
+    for (let i = 0; i < listItems.length; i++) {
+        list.push(listItems[i].textContent);
+    }
+    dialog.showSaveDialog((fileName) => {
+        if (fileName === undefined){
+            console.log("Die Datei wurde nicht gespeichert");
+            return;
+        }
+ 
+        fs.writeFile(fileName, list, (err) => {
+            if(err){
+                alert("Beim Speichern ist ein Fehler aufgetreten "+ err.message)
+            }
+                        
+            alert("Die Datei wurde erfolgreich gespeichert!");
+            list = [];
+        });
+    });
+})
